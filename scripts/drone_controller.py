@@ -27,11 +27,14 @@ class DroneController:
     # the rest only works if exactly three points found
     if num_points<>3:
       rospy.logwarn("Got %d points - was expecting 3" % num_points)
-      return
-    # lateral control to line up middle point with outer two
-    t.linear.y = -2.0*(data.points[1].x - 0.5*data.points[0].x - 0.5*data.points[2].x)
-    # longitudinal control to line up middle point with outer two
-    t.linear.x = -1.0*(data.points[1].y - 0.5*data.points[0].y - 0.5*data.points[2].y)
+    else:
+      # lateral control to line up middle point with outer two
+      t.linear.y = -2.0*(data.points[1].x - 0.5*data.points[0].x - 0.5*data.points[2].x)
+      # height control to line up middle point with outer two
+      t.linear.z = -2.0*(data.points[1].y - 0.5*data.points[0].y - 0.5*data.points[2].y)
+      # longitudinal control to keep the back two fixed angle apart
+      t.linear.x = -1.0*(data.points[2].x - data.points[0].x - 0.2)
+    # send command anyway
     self.twist_pub.publish(t)
 
 def main():
