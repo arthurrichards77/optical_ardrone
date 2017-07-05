@@ -5,25 +5,71 @@
     <arg name="drone_ip" default="192.168.1.1" />
 
     <!-- options: turn off control panel or turn on image viewer -->
-    <arg name="image" default="True" />
+    <arg name="image" default="False" />
+    <arg name="blobs" default="True" />
     <arg name="panel" default="True" />
+    <!-- optional tuning GUIs for control loops -->
+    <arg name="tuning" default="True" />
+
+
 
     <node name="driver" pkg="ardrone_autonomy" type="ardrone_driver" args="-ip $(arg drone_ip)" respawn="true" />
+
+
 
     <!-- name parameter used for panel title - useful if multiple drones in action -->
     <param name="drone_name" value="$(arg drone_name)"/>
     <node name="panel" pkg="brl_drones" type="drone_panel.py" if="$(arg panel)" />
 
+
+
     <node name="image_in_view" pkg="image_view" type="image_view" if="$(arg image)">
         <remap from="image" to="ardrone/image_raw" />
     </node>
 
+
+
     <node name="cone_tracker" pkg="optical_ardrone" type="cone_tracker.py" />
 
-    <node name="drone_controller" pkg="optical_ardrone" type="drone_controller.py" />
-
-    <node name="image_out_view" pkg="image_view" type="image_view" if="$(arg image)">
+    <node name="blobs_view" pkg="image_view" type="image_view" if="$(arg blobs)">
         <remap from="image" to="image_out" />
     </node>
+
+
+
+    <node name="control" pkg="optical_ardrone" type="drone_controller.py">
+
+      <param name="pitch/init_gains/kp" type="double" value="2.0" />
+      <param name="pitch/init_gains/ki" type="double" value="0.0" />
+      <param name="pitch/init_gains/kd" type="double" value="0.0" />
+      <param name="pitch/init_limits/upper" type="double" value="0.3" />
+      <param name="pitch/init_limits/lower" type="double" value="-0.3" />
+
+      <param name="roll/init_gains/kp" type="double" value="2.0" />
+      <param name="roll/init_gains/ki" type="double" value="0.0" />
+      <param name="roll/init_gains/kd" type="double" value="0.0" />
+      <param name="roll/init_limits/upper" type="double" value="0.3" />
+      <param name="roll/init_limits/lower" type="double" value="-0.3" />
+
+      <param name="yaw/init_gains/kp" type="double" value="1.0" />
+      <param name="yaw/init_gains/ki" type="double" value="0.0" />
+      <param name="yaw/init_gains/kd" type="double" value="0.0" />
+      <param name="yaw/init_limits/upper" type="double" value="0.3" />
+      <param name="yaw/init_limits/lower" type="double" value="-0.3" />
+
+      <param name="height/init_gains/kp" type="double" value="2.0" />
+      <param name="height/init_gains/ki" type="double" value="0.0" />
+      <param name="height/init_gains/kd" type="double" value="0.0" />
+      <param name="height/init_limits/upper" type="double" value="0.3" />
+      <param name="height/init_limits/lower" type="double" value="-0.3" />
+
+    </node>
+
+    <node pkg="brl_drones" if="$(arg tuning)" name="roll_tuning" type="pid_tune_gui.py" ns="control/roll" />
+    <node pkg="brl_drones" if="$(arg tuning)" name="pitch_tuning" type="pid_tune_gui.py" ns="control/pitch" />
+    <node pkg="brl_drones" if="$(arg tuning)" name="yaw_tuning" type="pid_tune_gui.py" ns="control/yaw" />
+    <node pkg="brl_drones" if="$(arg tuning)" name="height_tuning" type="pid_tune_gui.py" ns="control/height" />
+
+
 
 </launch>
