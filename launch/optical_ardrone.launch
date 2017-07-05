@@ -45,19 +45,19 @@
       <param name="pitch/init_limits/upper" type="double" value="0.3" />
       <param name="pitch/init_limits/lower" type="double" value="-0.3" />
 
-      <param name="roll/init_gains/kp" type="double" value="2.0" />
+      <param name="roll/init_gains/kp" type="double" value="4.0" />
       <param name="roll/init_gains/ki" type="double" value="0.0" />
-      <param name="roll/init_gains/kd" type="double" value="0.0" />
+      <param name="roll/init_gains/kd" type="double" value="2.0" />
       <param name="roll/init_limits/upper" type="double" value="0.3" />
       <param name="roll/init_limits/lower" type="double" value="-0.3" />
 
-      <param name="yaw/init_gains/kp" type="double" value="1.0" />
-      <param name="yaw/init_gains/ki" type="double" value="0.0" />
+      <param name="yaw/init_gains/kp" type="double" value="3.0" />
+      <param name="yaw/init_gains/ki" type="double" value="0.03" />
       <param name="yaw/init_gains/kd" type="double" value="0.0" />
       <param name="yaw/init_limits/upper" type="double" value="0.3" />
       <param name="yaw/init_limits/lower" type="double" value="-0.3" />
 
-      <param name="height/init_gains/kp" type="double" value="2.0" />
+      <param name="height/init_gains/kp" type="double" value="8.0" />
       <param name="height/init_gains/ki" type="double" value="0.0" />
       <param name="height/init_gains/kd" type="double" value="0.0" />
       <param name="height/init_limits/upper" type="double" value="0.3" />
